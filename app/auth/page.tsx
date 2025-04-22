@@ -1,10 +1,30 @@
+import { cookies } from "next/headers";
 import AuthForm from "../_components/AuthForm";
 import { IFormData } from "../_interfaces/auth";
+import { handleLogin, handleRegister } from "../_services/auth";
+import { redirect } from "next/navigation";
 
 function Page() {
   const handleSubmit = async (formData: IFormData, isRegistering: boolean) => {
     "use server";
-    console.log(formData, isRegistering);
+    const { data, error } = isRegistering
+      ? await handleRegister(formData)
+      : await handleLogin(formData);
+
+    if (error) {
+      return error;
+    }
+
+    const cookie = await cookies();
+    cookie.set("session", data, {
+      httpOnly: true,
+      maxAge: 3600,
+      path: "/",
+      sameSite: "strict",
+      secure: true,
+    });
+
+    redirect("/");
   };
 
   return (

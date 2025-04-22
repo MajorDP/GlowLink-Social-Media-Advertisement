@@ -2,19 +2,27 @@
 import { LogIn, UserPlus } from "lucide-react";
 import { useState } from "react";
 import { IFormData } from "../_interfaces/auth";
+import { useForm } from "react-hook-form";
 
 interface IAuthForm {
-  onSubmit: (formData: IFormData, isRegistering: boolean) => void;
+  onSubmit: (
+    formData: IFormData,
+    isRegistering: boolean
+  ) => Promise<string | null>;
 }
 
 function AuthForm({ onSubmit }: IAuthForm) {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm();
+  const password = watch("password");
+
   const [isRegistering, setIsRegistering] = useState(false);
-  const [formData, setFormData] = useState<IFormData>({
-    username: "",
-    email: "",
-    password: "",
-    repeatPassword: "",
-  });
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2">
@@ -30,65 +38,88 @@ function AuthForm({ onSubmit }: IAuthForm) {
 
       <form
         className="flex flex-col gap-4 mt-4"
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSubmit(formData, isRegistering);
-        }}
+        onSubmit={handleSubmit(async (data) => {
+          const error = await onSubmit(data as IFormData, isRegistering);
+          if (error) {
+            setError("email", {
+              type: "manual",
+              message: error,
+            });
+          }
+        })}
       >
         {isRegistering && (
           <input
             type="text"
             placeholder="Username"
             className="bg-white/10 border border-white/20 p-3 rounded-lg focus:outline-none"
-            value={formData.username}
-            onChange={(e) => {
-              setFormData((prev) => {
-                return { ...prev, username: e.target.value };
-              });
-            }}
+            {...register("username", {
+              required: "Please enter a username.",
+              minLength: {
+                value: 6,
+                message: "Username must be at least 6 characters long",
+              },
+            })}
           />
         )}
         <input
           type="email"
           placeholder="Email"
           className="bg-white/10 border border-white/20 p-3 rounded-lg focus:outline-none"
-          value={formData.email}
-          onChange={(e) => {
-            setFormData((prev) => {
-              return { ...prev, email: e.target.value };
-            });
-          }}
+          {...register("email", {
+            required: "Please enter an email.",
+            pattern: {
+              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+              message: "Please enter a valid email address",
+            },
+          })}
         />
         <input
           type="password"
           placeholder="Password"
           className="bg-white/10 border border-white/20 p-3 rounded-lg focus:outline-none"
-          value={formData.password}
-          onChange={(e) => {
-            setFormData((prev) => {
-              return { ...prev, password: e.target.value };
-            });
-          }}
+          {...register("password", {
+            required: "Please enter a password.",
+            minLength: {
+              value: 6,
+              message: "Password must be at least 6 characters long",
+            },
+          })}
         />
 
         {isRegistering && (
           <input
-            type="text"
+            type="password"
             placeholder="Repeat Password"
             className="bg-white/10 border border-white/20 p-3 rounded-lg focus:outline-none"
-            value={formData.repeatPassword}
-            onChange={(e) => {
-              setFormData((prev) => {
-                return { ...prev, repeatPassword: e.target.value };
-              });
-            }}
+            {...register("repeatPassword", {
+              required: "Please repeat your password.",
+              minLength: {
+                value: 6,
+                message: "Password must be at least 6 characters long",
+              },
+              validate: (value) =>
+                (value && value === password) || "Passwords do not match",
+            })}
           />
         )}
+
+        {Object.values(errors)[0]?.message && (
+          <p className="text-red-400 text-center">
+            {Object.values(errors)[0]?.message as string}
+          </p>
+        )}
+
         <button
           type="submit"
-          className="bg-white text-black py-2 rounded-lg font-semibold hover:opacity-90 transition-opacity cursor-pointer"
+          className="disabled:bg-black enabled:bg-white disabled:text-white enabled:text-black transition-all duration-200 py-2 rounded-lg font-semibold hover:opacity-90 cursor-pointer"
+          disabled={isSubmitting}
         >
-          {isRegistering ? "Sign Up" : "Log In"}
+          {isSubmitting
+            ? "Please wait..."
+            : isRegistering
+            ? "Sign Up"
+            : "Sign In"}
         </button>
       </form>
 

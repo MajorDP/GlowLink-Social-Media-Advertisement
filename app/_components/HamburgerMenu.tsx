@@ -3,7 +3,20 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 
-export default function HamburgerMenu() {
+interface IHamburgerMenu {
+  session: {
+    id: string;
+    role: string;
+    username: string;
+    iat: number;
+    exp: number;
+  };
+  handleLogout: () => void;
+}
+export default function HamburgerMenu({
+  session,
+  handleLogout,
+}: IHamburgerMenu) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -18,7 +31,7 @@ export default function HamburgerMenu() {
       {open && (
         <div
           onClick={() => setOpen(false)}
-          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          className="fixed inset-0 bg-black/70 bg-opacity-50 z-40"
         />
       )}
 
@@ -39,24 +52,28 @@ export default function HamburgerMenu() {
                 Home
               </Link>
             </li>
-            <li>
-              <Link
-                href="/user"
-                className="hover:text-slate-300"
-                onClick={() => setOpen(false)}
-              >
-                Your page
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/create"
-                className="hover:text-slate-300"
-                onClick={() => setOpen(false)}
-              >
-                Create
-              </Link>
-            </li>
+            {session && (
+              <>
+                <li>
+                  <Link
+                    href="/user"
+                    className="hover:text-slate-300"
+                    onClick={() => setOpen(false)}
+                  >
+                    Your page
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/create"
+                    className="hover:text-slate-300"
+                    onClick={() => setOpen(false)}
+                  >
+                    Create
+                  </Link>
+                </li>
+              </>
+            )}
             <li>
               <Link
                 href="/features"
@@ -84,6 +101,30 @@ export default function HamburgerMenu() {
                 Examples
               </Link>
             </li>
+
+            {session ? (
+              <li>
+                <button
+                  className="hover:text-slate-300"
+                  onClick={() => {
+                    handleLogout();
+                    setOpen(false);
+                  }}
+                >
+                  Sign out
+                </button>
+              </li>
+            ) : (
+              <li>
+                <Link
+                  className="hover:text-slate-300"
+                  href="/auth"
+                  onClick={() => setOpen(false)}
+                >
+                  Sign Up/In
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       </div>
