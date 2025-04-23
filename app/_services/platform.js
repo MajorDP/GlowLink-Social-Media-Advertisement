@@ -1,5 +1,11 @@
-export const getPlatform = async (id) => {
+import { getSession } from "./session";
+
+export const getPlatformById = async (id) => {
   console.log(id);
+  const res = await fetch(`http://localhost:3000/api/platform/get/${id}`);
+
+  const data = await res.json();
+  return data;
 };
 
 export const deletePlatform = async (id) => {
@@ -11,5 +17,16 @@ export const editPlatform = async (data) => {
 };
 
 export const createPlatform = async (data) => {
-  console.log(data);
+  const session = await getSession();
+
+  const res = await fetch("http://localhost:3000/api/platform/create", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ data, session }),
+  });
+
+  const insertedData = await res.json();
+  return insertedData;
 };

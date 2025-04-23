@@ -7,6 +7,5 @@ export async function getSession() {
   const token = cookiesStore.get("session");
   const decoded = jwt.decode(token?.value);
 
-  console.log(decoded);
   return decoded;
 }

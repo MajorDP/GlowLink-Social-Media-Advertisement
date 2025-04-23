@@ -56,7 +56,7 @@ export default function HamburgerMenu({
               <>
                 <li>
                   <Link
-                    href="/user"
+                    href="/page-showcase"
                     className="hover:text-slate-300"
                     onClick={() => setOpen(false)}
                   >

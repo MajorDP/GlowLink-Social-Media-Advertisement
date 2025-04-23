@@ -2,16 +2,16 @@
 //some questions' components and onChange event-handlers are up for adjustments after metadata queries form Instagram/TikTok are implemented.
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { IPageInputData } from "../_interfaces/page";
+import Error from "./Error";
 
 interface ICreationForm {
   onSubmit: (formData: IPageInputData) => void;
 }
 
 function CreationForm({ onSubmit }: ICreationForm) {
-  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
   const [question, setQuestion] = useState(0);
   const [formData, setFormData] = useState<IPageInputData>({
     platforms: [],
@@ -295,18 +295,15 @@ function CreationForm({ onSubmit }: ICreationForm) {
 
   const handleNext = () => {
     if (question === questions.length - 1) {
-      console.log("end of quiz");
-      onSubmit(formData);
-      router.push("/page-showcase");
+      const error = onSubmit(formData);
+      setError(error.message || null);
     } else {
       setQuestion((prev) => prev + 1);
     }
   };
 
   const handlePrev = () => {
-    if (question === 0) {
-      console.log("start of quiz");
-    } else {
+    if (question !== 0) {
       setQuestion((prev) => prev - 1);
     }
   };
@@ -341,6 +338,7 @@ function CreationForm({ onSubmit }: ICreationForm) {
         >
           {question === questions.length - 1 ? "Finish" : "Next"}
         </button>
+        {error && <Error message={error} />}
       </div>
     </div>
   );

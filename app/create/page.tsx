@@ -1,11 +1,20 @@
+import { redirect } from "next/navigation";
 import CreationForm from "../_components/CreationForm";
 import DisappearingMessage from "../_components/DisappearingMessage";
 import { IPageInputData } from "../_interfaces/page";
+import { createPlatform } from "../_services/platform";
 
 function page() {
   const handleSubmit = async (formData: IPageInputData) => {
     "use server";
-    console.log(formData);
+
+    const { data, error } = await createPlatform(formData);
+
+    if (!error && data) {
+      redirect("/page-showcase");
+    } else {
+      return error;
+    }
   };
 
   return (
