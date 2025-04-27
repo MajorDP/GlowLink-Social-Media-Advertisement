@@ -27,7 +27,8 @@ export interface IPageInputData {
       }>
     | [];
   contactEmail: string;
-  donationLink: string;
+  donationsLink: string;
+  template: string;
 }
 
 export interface IPageData {
@@ -63,5 +64,11 @@ export interface IPageData {
       }>
     | [];
   contactEmail: string;
-  donationLink: string;
+  donationsLink: string;
+  template: string;
+}
+
+export interface ITemplate {
+  data: IPageData;
+  isPublic: boolean;
 }

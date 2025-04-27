@@ -18,6 +18,7 @@ export async function POST(req) {
       (link) => link.name && link.link
     ),
     platformsData: data.platforms,
+    template: data.template,
   };
 
   if (!pageData.uid) {
@@ -72,6 +73,13 @@ export async function POST(req) {
     return NextResponse.json({
       data: null,
       error: { message: "Please provide valid additional links and headings." },
+    });
+  }
+
+  if (pageData.template.trim() === "") {
+    return NextResponse.json({
+      data: null,
+      error: { message: "Please choose a template." },
     });
   }
 

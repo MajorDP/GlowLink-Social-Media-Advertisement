@@ -26,6 +26,7 @@ function CreationForm({ onSubmit }: ICreationForm) {
     additionalLinks: [{ name: "", link: "" }],
     contactEmail: "",
     donationLink: "",
+    template: "",
   });
 
   const validateStep = (stepIndex: number, data: IPageInputData): boolean => {
@@ -60,6 +61,8 @@ function CreationForm({ onSubmit }: ICreationForm) {
             (link) => link.name.trim() === "" && link.link.trim() === ""
           )
         );
+      case 7: //Template
+        return data.template.trim() !== "";
       default:
         return true;
     }
@@ -344,6 +347,40 @@ function CreationForm({ onSubmit }: ICreationForm) {
               <Plus className="w-5 h-5 cursor-pointer text-black" />
             </button>
           )}
+        </div>
+      ),
+    },
+    {
+      title: "Choose a Template",
+      description: "Select the look of your page.",
+      component: (
+        <div className="flex flex-col gap-4 items-center justify-center w-full">
+          <button
+            className="bg-white px-4 py-2 rounded-lg text-black cursor-pointer w-[10rem] text-sm md:text-base hover:scale-105 duration-200"
+            onClick={() =>
+              setFormData((prev) => {
+                return {
+                  ...prev,
+                  template: "templateA",
+                };
+              })
+            }
+          >
+            Standard
+          </button>
+          <button
+            className="bg-white px-4 py-2 rounded-lg text-black cursor-pointer w-[10rem] text-sm md:text-base hover:scale-105 duration-200"
+            onClick={() =>
+              setFormData((prev) => {
+                return {
+                  ...prev,
+                  template: "templateB",
+                };
+              })
+            }
+          >
+            Dark
+          </button>
         </div>
       ),
     },

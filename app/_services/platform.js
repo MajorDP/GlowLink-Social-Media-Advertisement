@@ -8,6 +8,16 @@ export const getPlatformById = async (id) => {
   return data;
 };
 
+export const getPlatformByUsername = async (username) => {
+  console.log(username);
+  const res = await fetch(
+    `http://localhost:3000/api/platform/get/user/${username}`
+  );
+
+  const data = await res.json();
+  return data;
+};
+
 export const deletePlatform = async (id) => {
   console.log(id);
 };
