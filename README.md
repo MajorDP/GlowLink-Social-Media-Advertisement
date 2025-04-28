@@ -1,8 +1,8 @@
-# 🌟 GlowLink (App Skeleton)
+# 🌟 CreatorLink
 
 _Next.js SaaS-app for building branded landing pages for content creators._
 
-GlowLink is a customizable link-in-bio landing page built for creators, influencers, and digital storytellers. Showcase your content, connect your socials, and monetize your audience — all in one stunning page.
+CreatorLink is a customizable link-in-bio landing page built for creators, influencers, and digital storytellers. Showcase your content, connect your socials, and monetize your audience — all in one stunning page.
 
 ---
 

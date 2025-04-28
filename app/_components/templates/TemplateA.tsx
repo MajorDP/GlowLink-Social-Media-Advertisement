@@ -7,7 +7,7 @@ function TemplateA({ data, isPublic }: ITemplate) {
     <div
       className={`${
         isPublic && "absolute top-0"
-      } bg-black via-violet-950 to-slate-950 shadow-xl shadow-teal-800 flex flex-col w-full h-full`}
+      } py-12 bg-slate-900 shadow-xl shadow-teal-800 flex flex-col w-full`}
     >
       {!isPublic && (
         <Link
@@ -77,23 +77,21 @@ function TemplateA({ data, isPublic }: ITemplate) {
         </Link>
       )}
       <h2 className="text-center text-xl mt-8">Featured Posts</h2>
-      {data.featuredContent.length > 0 && (
-        <div className="mt-6 flex flex-row flex-wrap gap-8 justify-center">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <Link
-              href="https://instagram.com"
-              key={i}
-              className="rounded-md w-fit bg-red-200 overflow-hidden aspect-square"
-            >
-              <img
-                src={`https://picsum.photos/200/200?random=${i}`}
-                alt="post"
-                className="object-cover w-[15rem] h-[15rem] hover:scale-105 duration-200"
-              />
-            </Link>
-          ))}
-        </div>
-      )}
+      <div className="mt-6 flex flex-row flex-wrap gap-8 justify-center">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <Link
+            href="https://instagram.com"
+            key={i}
+            className="rounded-md w-fit bg-red-200 overflow-hidden aspect-square"
+          >
+            <img
+              src={`https://picsum.photos/200/200?random=${i}`}
+              alt="post"
+              className="object-cover w-[15rem] h-[15rem] hover:scale-105 duration-200"
+            />
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }

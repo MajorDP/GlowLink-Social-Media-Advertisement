@@ -6,11 +6,44 @@ import { useEffect, useState } from "react";
 import { IPageInputData } from "../_interfaces/page";
 import Error from "./Error";
 import { Plus, X } from "lucide-react";
+import Image from "next/image";
+import img1 from "../../public/tempa.png";
+import img2 from "../../public/tempb.png";
+import img3 from "../../public/tempc.png";
+import img4 from "../../public/tempd.png";
+import img5 from "../../public/tempe.png";
 
 interface ICreationForm {
   onSubmit: (formData: IPageInputData) => void;
 }
 
+const templates = [
+  {
+    name: "Basic",
+    value: "templateA",
+    img: img1,
+  },
+  {
+    name: "Dark",
+    value: "templateB",
+    img: img2,
+  },
+  {
+    name: "Modern",
+    value: "templateC",
+    img: img3,
+  },
+  {
+    name: "Pretty Pink",
+    value: "templateD",
+    img: img4,
+  },
+  {
+    name: "Pretty Dark",
+    value: "templateE",
+    img: img5,
+  },
+];
 function CreationForm({ onSubmit }: ICreationForm) {
   const [error, setError] = useState<string | null>(null);
   const [question, setQuestion] = useState(0);
@@ -25,7 +58,7 @@ function CreationForm({ onSubmit }: ICreationForm) {
     featuredContent: [],
     additionalLinks: [{ name: "", link: "" }],
     contactEmail: "",
-    donationLink: "",
+    donationsLink: "",
     template: "",
   });
 
@@ -49,8 +82,8 @@ function CreationForm({ onSubmit }: ICreationForm) {
         );
       case 5: // Donations link
         return (
-          data.donationLink.trim().length === 0 ||
-          linkRegExp.test(data.donationLink)
+          data.donationsLink.trim().length === 0 ||
+          linkRegExp.test(data.donationsLink)
         );
       case 6: // Additional links
         return (
@@ -263,11 +296,11 @@ function CreationForm({ onSubmit }: ICreationForm) {
       component: (
         <div className="flex flex-row flex-wrap gap-8 justify-center w-full">
           <input
-            value={formData.donationLink}
+            value={formData.donationsLink}
             onChange={(e) =>
               setFormData((prev) => ({
                 ...prev,
-                donationLink: e.target.value,
+                donationsLink: e.target.value,
               }))
             }
             placeholder="https://paypal.me/your-name"
@@ -352,35 +385,36 @@ function CreationForm({ onSubmit }: ICreationForm) {
     },
     {
       title: "Choose a Template",
-      description: "Select the look of your page.",
+      description: "Choose the look of your page.",
       component: (
-        <div className="flex flex-col gap-4 items-center justify-center w-full">
-          <button
-            className="bg-white px-4 py-2 rounded-lg text-black cursor-pointer w-[10rem] text-sm md:text-base hover:scale-105 duration-200"
-            onClick={() =>
-              setFormData((prev) => {
-                return {
-                  ...prev,
-                  template: "templateA",
-                };
-              })
-            }
-          >
-            Standard
-          </button>
-          <button
-            className="bg-white px-4 py-2 rounded-lg text-black cursor-pointer w-[10rem] text-sm md:text-base hover:scale-105 duration-200"
-            onClick={() =>
-              setFormData((prev) => {
-                return {
-                  ...prev,
-                  template: "templateB",
-                };
-              })
-            }
-          >
-            Dark
-          </button>
+        <div className="h-full flex md:flex-row flex-col gap-4 items-center justify-center w-full">
+          {templates.map((template, index) => (
+            <button
+              key={index}
+              className={`${
+                formData.template === template.value
+                  ? "ring ring-blue-600 rounded-lg"
+                  : ""
+              } bg-white rounded-lg text-black cursor-pointer w-[10rem] text-sm md:text-base hover:scale-105 duration-200`}
+              onClick={() =>
+                setFormData((prev) => {
+                  return {
+                    ...prev,
+                    template: template.value,
+                  };
+                })
+              }
+            >
+              <p>{template.name}</p>
+              <Image
+                src={template.img} // <- Notice: Just path from public root
+                alt="A cool picture"
+                className="rounded-b-lg"
+                width={500}
+                height={500}
+              />
+            </button>
+          ))}
         </div>
       ),
     },

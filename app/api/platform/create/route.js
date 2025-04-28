@@ -4,6 +4,7 @@ import { supabase } from "../../../_services/supabase";
 export async function POST(req) {
   const { data, session } = await req.json();
 
+  console.log(data);
   const pageData = {
     uid: session.id,
     displayName: data.bio.displayName.replace("@", ""),
@@ -13,7 +14,7 @@ export async function POST(req) {
     }),
     featuredContent: [], //TODO: REPLACE LATER
     contactEmail: data.contactEmail,
-    donationsLink: data.donationLink,
+    donationsLink: data.donationsLink,
     additionalLinks: data.additionalLinks.filter(
       (link) => link.name && link.link
     ),

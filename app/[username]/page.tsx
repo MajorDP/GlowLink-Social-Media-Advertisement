@@ -23,8 +23,11 @@ async function page({ params }: IPage) {
   const templateMap: Record<string, ComponentType<ITemplate>> = {
     templateA: dynamic(() => import("../_components/templates/TemplateA")),
     templateB: dynamic(() => import("../_components/templates/TemplateB")),
+    templateC: dynamic(() => import("../_components/templates/TemplateC")),
+    templateD: dynamic(() => import("../_components/templates/TemplateD")),
+    templateE: dynamic(() => import("../_components/templates/TemplateE")),
   };
-  console.log(data);
+
   const TemplateComponent = templateMap[data.template];
 
   return <TemplateComponent data={data} isPublic={true} />;
